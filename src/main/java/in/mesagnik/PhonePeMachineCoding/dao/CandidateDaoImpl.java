@@ -6,10 +6,10 @@ import in.mesagnik.PhonePeMachineCoding.model.Candidate;
 import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class CandidateDaoImpl implements CandidateDao {
-    private static Map<String, Candidate> candidateStore = new HashMap<>();
+    private static final Map<String, Candidate> candidateStore = new HashMap<>();
 
     @Override
     public String save(CandidateBO candidateBO) {
@@ -49,7 +49,7 @@ public class CandidateDaoImpl implements CandidateDao {
 
     @Override
     public CandidateBO getCandidateForTopScore() {
-        List<Candidate> candidateList = candidateStore.values().stream().collect(Collectors.toList());
+        List<Candidate> candidateList = candidateStore.values().stream().toList();
         Candidate candidate = candidateList.stream()
                 .max(Comparator.comparingDouble(Candidate::getScore))
                 .orElse(null);

@@ -65,10 +65,10 @@ public class Main {
                 .build();
 
         try {
-            String candidateId1 = candidateService.registerCandidate(candidate1);
+            String candidateId1 = candidateService.addUser(candidate1);
             System.out.println("Candidate 1 registered with ID: " + candidateId1);
 
-            String candidateId2 = candidateService.registerCandidate(candidate2);
+            String candidateId2 = candidateService.addUser(candidate2);
             System.out.println("Candidate 2 registered with ID: " + candidateId2);
 
             String problemId1 = problemService.addProblem(problem1);
@@ -97,11 +97,15 @@ public class Main {
             System.out.println("Leader: " + leader.getName() + " with ID: " + leader.getId());
 
             Comparator<Problem> scoreComparator = Comparator.comparingInt(Problem::getScore);
-            List<Problem> problems = problemService.getProblems(ProblemTag.HASHMAP, DifficultyLevel.HARD, scoreComparator);
+            List<Problem> problems = problemService.fetchProblems(ProblemTag.HASHMAP, DifficultyLevel.HARD, scoreComparator);
             System.out.println("Hard problems with HashMap tag: " + problems.size() + " found");
 
             List<Problem> problemList = problemUserService.getSolvedProblemsListForUser(candidateId2);
             System.out.println("Candidate 2 solved " + problemList.size() + " problems");
+
+
+            List<Problem> mostLikedProblemList = problemService.getTopNLikedProblems(2);
+            System.out.println("Top liked problems are: " + mostLikedProblemList.size());
 
         } catch (Exception e) {
             throw new RuntimeException(e);

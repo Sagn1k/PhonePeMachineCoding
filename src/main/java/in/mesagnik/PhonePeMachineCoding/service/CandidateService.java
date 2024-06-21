@@ -13,7 +13,7 @@ public class CandidateService {
         this.candidateDao = new CandidateDaoImpl();
     }
 
-    public String registerCandidate(CandidateDTO candidateDTO) throws Exception {
+    public String addUser(CandidateDTO candidateDTO) throws Exception {
         validateInput(candidateDTO);
 
         CandidateBO candidateBO = CandidateBO.builder()

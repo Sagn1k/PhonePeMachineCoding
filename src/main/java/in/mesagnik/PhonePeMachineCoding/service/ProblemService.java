@@ -34,7 +34,7 @@ public class ProblemService {
                 .limit(limit).collect(Collectors.toList());
     }
 
-    public List<Problem> getProblems(ProblemTag problemTag, DifficultyLevel difficultyLevel, Comparator<Problem> comparator) {
+    public List<Problem> fetchProblems(ProblemTag problemTag, DifficultyLevel difficultyLevel, Comparator<Problem> comparator) {
         List<Problem> problems = problemStore.values().stream().toList();
         List<Problem> filteredProblems = new ArrayList<>();
         for (Problem problem : problems) {
@@ -63,5 +63,18 @@ public class ProblemService {
                 problems.add(fetchedProblem);
         }
         return problems;
+    }
+
+    public List<Problem> getTopNLikedProblems(Integer n){
+        List<Problem> problems = problemStore.values().stream().toList();
+
+        if(n>problems.size()){
+            return problems;
+        }
+
+        return problems.stream()
+                .sorted(Comparator.comparingInt(Problem::getNumberOfLikes).reversed())
+                .limit(n)
+                .collect(Collectors.toList());
     }
 }
