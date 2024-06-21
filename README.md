@@ -22,38 +22,54 @@ Capabilities
 Below are various functions that should be supported with necessary parameters passed.
 These are just suggestions, the signatures can be altered as long as the functionalities are provided.
 
-Registering a problem - addProblem()
-Registering a user - addUser()
-Fetch the list of problems - fetchProblems() - Should take as input filtering and sorting criterias and return all matching problems in the right order.
-The result should contain problem attributes like name, tag, difficulty level, score etc.
-Should also display number of users who have solved a problem and the average time taken for that problem
+- Registering a problem - addProblem()
+- Registering a user - addUser()
+- Fetch the list of problems - fetchProblems() - Should take as input filtering and sorting criterias and return all matching problems in the right order.
+  The result should contain problem attributes like name, tag, difficulty level, score etc.
+- Should also display number of users who have solved a problem and the average time taken for that problem
 Solve a problem - solve() - Exposed to a contestant to mark a problem as solved
 [ For the extension problem, this function should return next 5 recommended problems ]
-Fetch solved problems for a user - fetchSolvedProblems() - Fetch the list of solved problems for a user
-Get leader - getLeader() - Returns the name and department of the leader
+- Fetch solved problems for a user - fetchSolvedProblems() 
+- Fetch the list of solved problems for a user
+Get leader - getLeader() 
+- Returns the name and department of the leader
 Get top n liked problems of a certain tag - getTopNProblems()
+
+
 Guidelines
 
 You should store the data in-memory using a language-specific data-structure.
+
 Implement clear separation between your data layers and service layers.
+
 Simple and basic function are expected as entry point - no marks for providing fancy * restful API or framework implementation
 Because this is a machine coding round, heavy focus would be given on data modeling, code quality etc, candidate should not focus too much time on algo which compromises with implementation time
+
 Expectations:
 
 Your code should cover all the mandatory functionalities explained above.
 Your code should be executable and clean.
 Your code should be properly refactored, and exceptions should be gracefully handled.
 Appropriate errors should be displayed on the console
+
 How will you be evaluated?
 
 Code Should be working
+
 Code readability and testability
+
 Separation Of Concerns
+
 Abstraction
+
 Object-Oriented concepts.
+
 Language proficiency.
+
 Scalability
+
 Test Coverage (Bonus Points)
+
 [execution time limit] 4 seconds (js)
 
 [memory limit] 1 GB

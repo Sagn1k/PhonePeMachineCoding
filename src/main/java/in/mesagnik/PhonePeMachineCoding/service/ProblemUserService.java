@@ -1,9 +1,12 @@
 package in.mesagnik.PhonePeMachineCoding.service;
 
+import com.google.common.base.Preconditions;
+import in.mesagnik.PhonePeMachineCoding.exceptions.InvalidInputException;
 import in.mesagnik.PhonePeMachineCoding.model.Problem;
 import in.mesagnik.PhonePeMachineCoding.model.ProblemUserMapping;
 import in.mesagnik.PhonePeMachineCoding.model.enums.UserProblemStatus;
 import in.mesagnik.PhonePeMachineCoding.strategy.ScoreStrategy;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -22,9 +25,15 @@ public class ProblemUserService {
 
     public void solveProblem(String candidateId, String problemId, float timeTaken, ScoreStrategy scoreStrategy) {
         //validations to check valid candidate and problem
+        Preconditions.checkArgument(!StringUtils.isEmpty(candidateId), "candidate Id is missing in request");
+        Preconditions.checkArgument(!StringUtils.isEmpty(problemId), "problem Id is missing in request");
 
-        Problem problem = problemService.getProblem(problemId);
-        float finalScore = scoreStrategy.calculateScore(problem, timeTaken);
+        Optional<Problem> problemOptional = problemService.getProblem(problemId);
+
+        //Check if Problem is present or not, if not present then throw an error
+        if (problemOptional.isEmpty()) throw new InvalidInputException("Given ProblemId doesn't exist");
+
+        float finalScore = scoreStrategy.calculateScore(problemOptional.get(), timeTaken);
 
         ProblemUserMapping problemUserMapping = ProblemUserMapping.builder()
                 .id(UUID.randomUUID().toString())
@@ -44,17 +53,12 @@ public class ProblemUserService {
     }
 
     public List<Problem> getSolvedProblemsListForUser(String candidateId) {
-        List<ProblemUserMapping> problemUserMappings = problemUserMappingStore.values().stream().collect(Collectors.toList());
+        List<ProblemUserMapping> problemUserMappings = problemUserMappingStore.values().stream().toList();
         List<ProblemUserMapping> problemUserMappingsForCandidate = problemUserMappings.stream()
-                .filter(problemUserMapping -> problemUserMapping.getCandidateId() == candidateId &&
-                        problemUserMapping.getStatus().equals(UserProblemStatus.SOLVED))
-                .collect(Collectors.toList());
+                .filter(problemUserMapping -> Objects.equals(problemUserMapping.getCandidateId(), candidateId) &&
+                        problemUserMapping.getStatus().equals(UserProblemStatus.SOLVED)).toList();
 
-        if (problemUserMappingsForCandidate == null)
-            return new ArrayList<>();
-
-        List<Problem> problemsForUser = problemService.getProblemsForIds(problemUserMappingsForCandidate.stream().map(ProblemUserMapping::getProblemId).collect(Collectors.toList()));
-        return problemsForUser;
+        return problemService.getProblemsForIds(problemUserMappingsForCandidate.stream().map(ProblemUserMapping::getProblemId).collect(Collectors.toList()));
     }
 }
 

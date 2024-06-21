@@ -19,6 +19,9 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+
+        long startTime = System.currentTimeMillis() % 1000;
+
         CandidateService candidateService = new CandidateService();
         ProblemService problemService = new ProblemService();
         ProblemUserService problemUserService = new ProblemUserService();
@@ -61,10 +64,6 @@ public class Main {
                 .difficultyLevel(DifficultyLevel.HARD)
                 .build();
 
-
-
-
-
         try {
             String candidateId1 = candidateService.registerCandidate(candidate1);
             System.out.println("Candidate 1 registered with ID: " + candidateId1);
@@ -106,6 +105,10 @@ public class Main {
 
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            long endTime = System.currentTimeMillis() % 1000;
+
+            System.out.println("Total execution time of the application: " + (endTime - startTime) + " milliseconds");
         }
     }
 }

@@ -22,20 +22,20 @@ public class ProblemService {
         return id;
     }
 
-    public Problem getProblem(String problemId) {
-        return problemStore.get(problemId);
+    public Optional<Problem> getProblem(String problemId) {
+        return Optional.of(problemStore.getOrDefault(problemId, null));
     }
 
     public List<Problem> getTopProblems(ProblemTag problemTag, int limit) {
-        List<Problem> problems = problemStore.values().stream().collect(Collectors.toList());
-        List<Problem> problemsFiltered = problems.stream()
+        List<Problem> problems = problemStore.values().stream().toList();
+
+        return problems.stream()
                 .filter(problem -> problem.getTags().contains(problemTag))
                 .limit(limit).collect(Collectors.toList());
-        return problemsFiltered;
     }
 
     public List<Problem> getProblems(ProblemTag problemTag, DifficultyLevel difficultyLevel, Comparator<Problem> comparator) {
-        List<Problem> problems = problemStore.values().stream().collect(Collectors.toList());
+        List<Problem> problems = problemStore.values().stream().toList();
         List<Problem> filteredProblems = new ArrayList<>();
         for (Problem problem : problems) {
             if (problem.getTags().contains(problemTag) && problem.getDifficultyLevel().equals(difficultyLevel))
